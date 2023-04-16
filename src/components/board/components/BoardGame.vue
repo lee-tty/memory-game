@@ -7,7 +7,7 @@ export default {
   data() {
     return {
       playerName: '',
-      maxCardsSelected: 2,
+      maxFlippedCards: 2,
       selected: 0,
       cards: [],
       found: 0,
@@ -22,15 +22,15 @@ export default {
     selectCard(card) {
       if (!card.show) {
         this.cardsSelected = this.cardsSelected + 1;
-        if (this.cardsSelected <= this.maxCardsSelected) {
+        if (this.cardsSelected <= this.maxFlippedCards) {
           useBoardCardsStore().markSelectedCard({ card, visible: true });
           this.cards.push(card);
         }
         setTimeout(() => {
-          if (this.cards.length === this.maxCardsSelected) {
+          if (this.cards.length === this.maxFlippedCards) {
             const attempts = this.cards.every((selected) => selected.name === this.cards[0].name);
             if (attempts) {
-              this.found = this.found + this.maxCardsSelected;
+              this.found = this.found + this.maxFlippedCards;
               this.cards.forEach((selected) => {
                 useBoardCardsStore().markFoundCard(selected);
               });
@@ -52,16 +52,16 @@ export default {
     hideCardsBoard() {
       useBoardCardsStore().hideCards();
     },
-    async getBoardCards() {
+    async getBoardCards(pairCards) {
       this.cardsSelected = 0;
       this.found = 0;
       this.cards = [];
-      await useBoardCardsStore().getCards();
+      await useBoardCardsStore().getCards(pairCards);
     },
-    async getPlayerName(player) {
+    async getGameInfo({ player, pairCards }) {
       this.playerName = player;
       useBoardCardsStore().setPlayer(player);
-      await this.getBoardCards();
+      await this.getBoardCards(pairCards);
       await this.prepareBoard();
     }
   }
@@ -72,7 +72,7 @@ export default {
   <div class="container">
     <div class="row">
       <div class="col-12 text-center mt-5">
-        <ModalPlayer @get-player-name="getPlayerName" v-if="!player" />
+        <ModalPlayer @get-game-info="getGameInfo" v-if="!player" />
       </div>
     </div>
     <div class="">
@@ -101,7 +101,7 @@ export default {
           <div
             v-if="!boardCards[card].show"
             class=" card-reverse" @click="selectCard(boardCards[card])"
-            :class="{ 'disabled': card.show || cards.length === maxCardsSelected }"
+            :class="{ 'disabled': card.show || cards.length === maxFlippedCards }"
           >
           </div>
         </div>

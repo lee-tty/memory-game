@@ -7,17 +7,28 @@ export default {
     },
   },
   emits :{
-    getPlayerName: null
+    getGameInfo: null
 },
   data () {
     return {
       valueInput: this.value,
-      player: ''
+      player: '',
+      error: false,
+      isNotZero: 0,
+      pairCards: 20
     }
   },
   methods: {
     onInput() {
-      this.$emit('getPlayerName', this.player);
+      this.isNotZero = this.pairCards % 2 === 0;
+      if (!this.player || !this.isNotZero) {
+        this.error = true;
+        return;
+      }
+      this.$emit('getGameInfo', {
+        player: this.player,
+        pairCards: this.pairCards
+      });
       // eslint-disable-next-line no-undef
       var myModal = bootstrap.Modal.getInstance(document.getElementById('exampleModal'));
       myModal.hide();
@@ -40,22 +51,40 @@ export default {
           <h5 class="modal-title" id="exampleModalLabel">
             Player information
           </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form>
-            <label for="name" class="form-label">¿Whats your name?</label>
-            <input
-              type="text"
-              class="form-control"
-              id="name"
-              aria-describedby="nameHelp"
-              v-model="player"
-            />
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="basic-nameHelp">¿Whats your name?</span>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Your name"
+                aria-label="name"
+                aria-describedby="nameHelp"
+                v-model="player"
+              />
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="pairCardsHelp">¿How many pairs of cards do you want?</span>
+              <input
+                type="number"
+                class="form-control"
+                min="2"
+                aria-label="name"
+                aria-describedby="pairCardsHelp"
+                v-model="pairCards"
+              />
+            </div>
           </form>
+          <div class="alert alert-danger" role="alert" v-if="error && !player">
+            In order to play you have to enter your name
+          </div>
+          <div class="alert alert-danger" role="alert" v-if="error && !isNotZero">
+            The number of cards is not even
+          </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary" @click="onInput">Save player</button>
         </div>
       </div>

@@ -12,12 +12,10 @@ export const useBoardCardsStore = defineStore('boardCards', {
     player: (state) => state.playerGame
   },
   actions: {
-    async getCards() {
+    async getCards(pairCards) {
       try {
         const { data } = await axios
-          .get('https://fed-team.modyo.cloud/api/content/spaces/animals/types/game/entries?per_page=6');
-        data.entries.map((info) => console.log('map', info));
-
+          .get(`https://fed-team.modyo.cloud/api/content/spaces/animals/types/game/entries?per_page=${pairCards}`);
         this.cards = data.entries.reduce((index, card) => ({
           ...index,
           [`${card.meta.name}-1`]: {
