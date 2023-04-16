@@ -1,5 +1,8 @@
 <script>
 
+import {mapState} from "pinia";
+import {useBoardCardsStore} from "../../../stores/board";
+
 export default {
   props: {
     value: {
@@ -8,15 +11,19 @@ export default {
   },
   emits :{
     getGameInfo: null
-},
+  },
   data () {
     return {
       valueInput: this.value,
       player: '',
       error: false,
       isNotZero: 0,
-      pairCards: 20
+      pairCards: 20,
+      existingPlayer: 'no'
     }
+  },
+  computed: {
+    ...mapState(useBoardCardsStore, ['allPlayers'])
   },
   methods: {
     onInput() {
@@ -49,12 +56,50 @@ export default {
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">
-            Player information
+            First, we need this information
           </h5>
         </div>
         <div class="modal-body">
           <form>
-            <div class="input-group mb-3">
+            <div class="d-flex justify-content-around">
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  id="isOldPlayer"
+                  v-model="existingPlayer"
+                  value="yes"
+                >
+                <label class="form-check-label" for="isOldPlayer">
+                  Im an old player
+                </label>
+              </div>
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  id="isNotOldPlayer"
+                  v-model="existingPlayer"
+                  value="no"
+                >
+                <label class="form-check-label" for="isNotOldPlayer">
+                  Im a new player
+                </label>
+              </div>
+            </div>
+            <div v-if="existingPlayer === 'yes'">
+              <select class="form-select mb-3" aria-label="Select of players" v-model="player">
+                <option selected>Select your name</option>
+                <option
+                  v-for="(alreadyPlayer, index) in allPlayers"
+                  :key="index"
+                  :value="alreadyPlayer"
+                >
+                  {{alreadyPlayer}}
+                </option>
+              </select>
+            </div>
+            <div class="input-group mb-3" v-if="existingPlayer === 'no'">
               <span class="input-group-text" id="basic-nameHelp">¿Whats your name?</span>
               <input
                 type="text"
