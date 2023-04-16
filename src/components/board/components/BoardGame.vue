@@ -47,7 +47,7 @@ export default {
       }
     },
     prepareBoard: function () {
-      setTimeout(() => this.hideCardsBoard(), 3000);
+      setTimeout(() => this.hideCardsBoard(), 10000);
     },
     hideCardsBoard() {
       useBoardCardsStore().hideCards();
@@ -77,9 +77,6 @@ export default {
     </div>
     <div class="">
       Welcome {{player}}
-      <button class="btn btn-primary mt-3" @click="prepareBoard()">
-        START
-      </button>
     </div>
     <div class="row" v-if="player">
       <div class="col-12">
