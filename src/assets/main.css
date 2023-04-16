@@ -1,6 +1,6 @@
 @import './base.css';
 body {
-   background: #d2e7e5;
+   background: white;
 }
 .image-box {
     width: 100%;
@@ -19,9 +19,11 @@ body {
 
 
 .card-reverse {
-    background-image: url("/public/bg-card.jpg");
-    width: 180px;
-    height: 180px;
+    background-image: url("/public/bg-card-1.jpg");
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
 }
 
 .disabled {
