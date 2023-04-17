@@ -11,7 +11,8 @@ export default {
       selected: 0,
       cards: [],
       found: 0,
-      failures: 0
+      failures: 0,
+      timer: 10
     }
   },
   computed: {
@@ -47,6 +48,13 @@ export default {
       }
     },
     prepareBoard: function () {
+      this.interval = setInterval(() => {
+        if (this.timer === 0) {
+          clearInterval(this.interval)
+        } else {
+          this.timer--
+        }
+      }, 1000)
       setTimeout(() => this.hideCardsBoard(), 10000);
     },
     hideCardsBoard() {
@@ -70,9 +78,9 @@ export default {
 
 <template>
   <div class="container">
-    <div class="row">
-      <div class="col-12 text-center mt-2">
-        <ModalPlayer @get-game-info="getGameInfo" v-if="!player" />
+    <div class="row" v-if="!player">
+      <div class="col-12 mt-2">
+        <ModalPlayer @get-game-info="getGameInfo" />
       </div>
     </div>
     <div class="row" v-if="player">
@@ -80,23 +88,30 @@ export default {
         <h2 class="green">
           ¡Hi {{player}}! Welcome to MemoryGame
         </h2>
+        <h4 v-if="timer !== 0" class="text-danger">
+          Get Ready in {{timer}}
+        </h4>
         <h4>
-          <b>Attempts:</b> {{failures}}
-          <b>Hits:</b> {{found}}
+          <b class="text-danger">Attempts:</b> {{failures}}
+          <b class="text-success">Hits:</b> {{found / 2}}
         </h4>
       </div>
-      <div class="row">
-        <div
-          class="col-md-3 col-6 card-game m-3"
-          v-for="(card, index) in boardCardsRandom"
-          :key="index"
-        >
-          <img v-if="boardCards[card].show" :src="boardCards[card].image" class="image-box " alt="?">
+      <div class="col-12 mt-2 text-center">
+        <div class="row d-flex justify-content-around">
           <div
-            v-if="!boardCards[card].show"
-            class=" card-reverse" @click="selectCard(boardCards[card])"
-            :class="{ 'disabled': card.show || cards.length === maxFlippedCards }"
+            class="col-lg-2 col-md-4 col-sm-3 col-3"
+            v-for="(card, index) in boardCardsRandom"
+            :key="index"
           >
+            <div class="card-game m-2">
+              <img v-if="boardCards[card].show" :src="boardCards[card].image" class="image-box" alt="?" />
+              <img
+                v-if="!boardCards[card].show"
+                src="/public/bg-card-1.jpg"
+                :class="{ 'disabled': card.show || cards.length === maxFlippedCards }" alt="?"
+                class="image-box" @click="selectCard(boardCards[card])"
+              />
+            </div>
           </div>
         </div>
       </div>

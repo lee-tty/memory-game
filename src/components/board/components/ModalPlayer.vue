@@ -37,13 +37,13 @@ export default {
         pairCards: this.pairCards
       });
       // eslint-disable-next-line no-undef
-      var myModal = bootstrap.Modal.getInstance(document.getElementById('exampleModal'));
+      var myModal = bootstrap.Modal.getInstance(document.getElementById('formModal'));
       myModal.hide();
     },
   },
   mounted() {
     // eslint-disable-next-line no-undef
-    var myModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('exampleModal'), {
+    var myModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('formModal'), {
       backdrop: 'static'
     });
     myModal.show();
@@ -51,11 +51,11 @@ export default {
 }
 </script>
 <template>
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">
+          <h5 class="modal-title" id="modalTitle">
             First, we need this information
           </h5>
         </div>
@@ -99,10 +99,11 @@ export default {
                 </option>
               </select>
             </div>
-            <div class="input-group mb-3" v-if="existingPlayer === 'no'">
-              <span class="input-group-text" id="basic-nameHelp">¿Whats your name?</span>
+            <div class="mb-3 text-right" v-if="existingPlayer === 'no'">
+              <label for="name" class="form-label">¿Whats your name?</label>
               <input
                 type="text"
+                id="name"
                 class="form-control"
                 placeholder="Your name"
                 aria-label="name"
@@ -110,11 +111,12 @@ export default {
                 v-model="player"
               />
             </div>
-            <div class="input-group mb-3">
-              <span class="input-group-text" id="pairCardsHelp">¿How many pairs of cards do you want?</span>
+            <div class="mb-3 text-right">
+              <label for="cards" class="form-label">¿How many pairs of cards do you want?</label>
               <input
                 type="number"
                 class="form-control"
+                id="cards"
                 min="2"
                 aria-label="name"
                 aria-describedby="pairCardsHelp"
