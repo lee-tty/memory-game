@@ -2,8 +2,10 @@
 import { mapStores, mapState } from 'pinia';
 import { useBoardCardsStore } from '../../../stores/board';
 import ModalPlayer from './ModalPlayer.vue';
+import ToastMessage from './ToastMessage.vue';
+import HeaderBoard from './HeaderBoard.vue';
 export default {
-  components: { ModalPlayer },
+  components: { ModalPlayer, ToastMessage, HeaderBoard },
   data() {
     return {
       playerName: '',
@@ -12,12 +14,23 @@ export default {
       cards: [],
       found: 0,
       failures: 0,
+      gameOver: false,
       timer: 5
     }
   },
   computed: {
     ...mapStores(useBoardCardsStore),
     ...mapState(useBoardCardsStore, ['boardCards', 'boardCardsRandom', 'player']),
+  },
+  watch: {
+    found(newVal) {
+      if (newVal === (Object.values(this.boardCards).length / 2)) {
+        this.gameOver = true;
+        // eslint-disable-next-line no-undef
+        const toast = new bootstrap.Toast(document.getElementById('finished'));
+        toast.show();
+      }
+    }
   },
   methods: {
     selectCard(card) {
@@ -29,8 +42,8 @@ export default {
         }
         setTimeout(() => {
           if (this.cards.length === this.maxFlippedCards) {
-            const attempts = this.cards.every((selected) => selected.name === this.cards[0].name);
-            if (attempts) {
+            const successfulAttempt = this.cards.every((selected) => selected.name === this.cards[0].name);
+            if (successfulAttempt) {
               this.found = this.found +  1;
               this.cards.forEach((selected) => {
                 useBoardCardsStore().markFoundCard(selected);
@@ -44,7 +57,7 @@ export default {
             this.cardsSelected = 0;
             this.cards = [];
           }
-        }, 2000)
+        }, 1000)
       }
     },
     prepareBoard: function () {
@@ -83,19 +96,17 @@ export default {
         <ModalPlayer @get-game-info="getGameInfo" />
       </div>
     </div>
+    <ToastMessage
+      message="you have completed the game, congratulations"
+      title="¡¡¡WUJUUUUU!!! 🥳🎉"
+    />
     <div class="row" v-if="player">
-      <div class="col-12 mt-2 text-center">
-        <h2 class="green">
-          ¡Hi {{player}}! Welcome to MemoryGame
-        </h2>
-        <h4 v-if="timer !== 0" class="text-danger">
-          Get Ready in {{timer}}
-        </h4>
-        <h4>
-          <b class="text-danger">Attempts:</b> {{failures}}
-          <b class="text-success">Hits:</b> {{found}}
-        </h4>
-      </div>
+      <HeaderBoard
+        :player="player"
+        :found="found"
+        :failures="failures"
+        :timer="timer"
+      />
       <div class="col-12 mt-2 text-center">
         <div class="row d-flex justify-content-around">
           <div

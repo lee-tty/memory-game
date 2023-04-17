@@ -37,16 +37,16 @@ export default {
         pairCards: this.pairCards
       });
       // eslint-disable-next-line no-undef
-      var myModal = bootstrap.Modal.getInstance(document.getElementById('formModal'));
-      myModal.hide();
+      const formModal = bootstrap.Modal.getInstance(document.getElementById('formModal'));
+      formModal.hide();
     },
   },
   mounted() {
     // eslint-disable-next-line no-undef
-    var myModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('formModal'), {
+    const formModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('formModal'), {
       backdrop: 'static'
     });
-    myModal.show();
+    formModal.show();
   }
 }
 </script>
