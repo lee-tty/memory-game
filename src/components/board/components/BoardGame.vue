@@ -12,7 +12,7 @@ export default {
       cards: [],
       found: 0,
       failures: 0,
-      timer: 10
+      timer: 5
     }
   },
   computed: {
@@ -31,7 +31,7 @@ export default {
           if (this.cards.length === this.maxFlippedCards) {
             const attempts = this.cards.every((selected) => selected.name === this.cards[0].name);
             if (attempts) {
-              this.found = this.found + this.maxFlippedCards;
+              this.found = this.found +  1;
               this.cards.forEach((selected) => {
                 useBoardCardsStore().markFoundCard(selected);
               });
@@ -55,7 +55,7 @@ export default {
           this.timer--
         }
       }, 1000)
-      setTimeout(() => this.hideCardsBoard(), 10000);
+      setTimeout(() => this.hideCardsBoard(), 5000);
     },
     hideCardsBoard() {
       useBoardCardsStore().hideCards();
@@ -93,7 +93,7 @@ export default {
         </h4>
         <h4>
           <b class="text-danger">Attempts:</b> {{failures}}
-          <b class="text-success">Hits:</b> {{found / 2}}
+          <b class="text-success">Hits:</b> {{found}}
         </h4>
       </div>
       <div class="col-12 mt-2 text-center">
