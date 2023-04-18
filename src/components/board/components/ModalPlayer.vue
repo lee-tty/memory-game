@@ -1,8 +1,4 @@
 <script>
-
-import {mapState} from "pinia";
-import {useBoardCardsStore} from "../../../stores/board";
-
 export default {
   props: {
     value: {
@@ -14,6 +10,7 @@ export default {
   },
   data () {
     return {
+      allPlayers: [],
       valueInput: this.value,
       player: '',
       error: false,
@@ -22,11 +19,8 @@ export default {
       existingPlayer: 'no'
     }
   },
-  computed: {
-    ...mapState(useBoardCardsStore, ['allPlayers'])
-  },
   methods: {
-    onInput() {
+    saveInfo() {
       this.isNotZero = this.pairCards % 2 === 0;
       if (!this.player || !this.isNotZero) {
         this.error = true;
@@ -47,6 +41,9 @@ export default {
       backdrop: 'static'
     });
     formModal.show();
+    if (sessionStorage.getItem('players')) {
+      this.allPlayers = JSON.parse(sessionStorage.getItem('players'));
+    }
   }
 }
 </script>
@@ -60,7 +57,7 @@ export default {
           </h5>
         </div>
         <div class="modal-body">
-          <form>
+          <form action="javascript:void(-1)">
             <div class="d-flex justify-content-around">
               <div class="form-check mb-3">
                 <input
@@ -132,7 +129,7 @@ export default {
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" @click="onInput">Save player</button>
+          <button type="button" class="btn btn-primary" @click="saveInfo">Save player</button>
         </div>
       </div>
     </div>

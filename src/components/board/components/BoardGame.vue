@@ -79,9 +79,25 @@ export default {
       this.cards = [];
       await useBoardCardsStore().getCards(pairCards);
     },
+    setPlayerSession(player) {
+      let allPlayers = [];
+      if (sessionStorage.getItem('players')) {
+        allPlayers = JSON.parse(sessionStorage.getItem('players'));
+      }
+      let alreadyPlayers = [];
+      const existingPlayer = allPlayers.find((alreadyPlayer) => alreadyPlayer.toLowerCase() === player.toLowerCase());
+      if (!existingPlayer) {
+        if (sessionStorage.getItem('players')) {
+          alreadyPlayers = JSON.parse(sessionStorage.getItem('players'));
+        }
+        alreadyPlayers.push(player);
+        sessionStorage.setItem('players', JSON.stringify(alreadyPlayers));
+      }
+    },
     async getGameInfo({ player, pairCards }) {
       this.playerName = player;
       useBoardCardsStore().setPlayer(player);
+      this.setPlayerSession(player);
       await this.getBoardCards(pairCards);
       await this.prepareBoard();
     }

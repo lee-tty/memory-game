@@ -9,15 +9,8 @@ export const useBoardCardsStore = defineStore('boardCards', {
   getters: {
     boardCards: (state) => state.cards,
     boardCardsRandom: (state) => Object.keys(state.cards)
-      .sort(() => {
-      return Math.random() - 0.5;
-    }),
-    player: (state) => state.playerGame,
-    allPlayers: () => {
-      if (sessionStorage.getItem('players')) {
-        return JSON.parse(sessionStorage.getItem('players'));
-      }
-    }
+      .sort(() => Math.random() - 0.5),
+    player: (state) => state.playerGame
   },
   actions: {
     async getCards(pairCards) {
@@ -56,16 +49,6 @@ export const useBoardCardsStore = defineStore('boardCards', {
     },
     setPlayer(player) {
       this.playerGame = player;
-      let alreadyPlayers;
-      const existingPlayer = (this.allPlayers || [])
-        .find((alreadyPlayer) => alreadyPlayer.toLowerCase() === player.toLowerCase());
-      if (!existingPlayer) {
-        if (sessionStorage.getItem('players')) {
-          alreadyPlayers = JSON.parse(sessionStorage.getItem('players'));
-        }
-        alreadyPlayers.push(player);
-        sessionStorage.setItem('players', JSON.stringify(alreadyPlayers));
-      }
     },
     markSelectedCard({ card, visible }) {
       this.cards[card.uuid].show = visible;
