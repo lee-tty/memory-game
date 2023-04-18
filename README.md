@@ -1,14 +1,17 @@
 # memory-game
+Hi! Welcome to my memory-game, I hope you enjoy playing!
 
-This template should help get you started developing with Vue 3 in Vite.
+When you start the game, a modal will appear in which you must enter your name 
+(or select it if you have already played) and place the number of cards you want 
+to play with (keep in mind that it is an even number).
 
-## Recommended IDE Setup
+After entering this data, the game will start 😁 you will see a series of cards 
+and you will have 5 seconds to memorize their positions since then they will 
+turn over and you will have to remember or guess where they were located! On 
+the board you will be able to see how many hits you have had and when you failed.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+Soooo let's get started!
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ## Project Setup
 
@@ -26,12 +29,6 @@ npm run dev
 
 ```sh
 npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
 ```
 
 ### Lint with [ESLint](https://eslint.org/)
