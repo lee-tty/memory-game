@@ -1,6 +1,7 @@
 @import './base.css';
 body {
-   background: white;
+    background: white;
+    color: #2c3e50;
 }
 .image-box {
     width: 100%;
